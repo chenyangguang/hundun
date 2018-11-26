@@ -32,7 +32,7 @@ func main() {
 			e.ChildText("td:nth-child(3)"),
 			e.ChildText("td:nth-child(4)"),
 			e.ChildText("td:nth-child(5)"),
-			e.ChildAttr("a", ""),
+			e.ChildAttr("a", "href"),
 		})
 	})
 
