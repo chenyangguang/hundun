@@ -4,4 +4,4 @@
 ## Go 爬取网上感兴趣的数据
 1. 爬取腾讯招聘官网数据
 
-![hr](./img/hr.png "hr")
+![hr](./img/hr-crawl.png "hr")
