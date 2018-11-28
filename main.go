@@ -26,19 +26,6 @@ func main() {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
-	/*
-		c.OnHTML("#position tbody tr", func(e *colly.HTMLElement) {
-			if strings.EqualFold(e.ChildAttr())
-			writer.Write([]string{
-				e.ChildText("td:nth-child(1)"),
-				e.ChildText("td:nth-child(2)"),
-				e.ChildText("td:nth-child(3)"),
-				e.ChildText("td:nth-child(4)"),
-				e.ChildText("td:nth-child(5)"),
-				e.ChildAttr("a", "href"),
-			})
-		})
-	*/
 	c.OnHTML("#position tbody tr", func(e *colly.HTMLElement) {
 		itemClass := e.Attr("class")
 
@@ -54,10 +41,6 @@ func main() {
 		}
 	})
 
-	c.OnHTML("span.next-button", func(h *colly.HTMLElement) {
-		t := h.ChildAttr("a #next", "href")
-		c.Visit(t)
-	})
 	c.Visit("https://hr.tencent.com/position.php?keywords=&lid=0&start=0#a")
 
 	log.Printf("Scraping finished, check file %q for results\n", fName)
