@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+var (
+	donain    = "https://hr.tencent.com/"
+	start_url = donain + "position.php?keywords=&lid=0&start=0#a"
+)
+
 func main() {
 	fName := "hr-tencent.csv"
 	file, err := os.Create(fName)
@@ -41,7 +46,13 @@ func main() {
 		}
 	})
 
-	c.Visit("https://hr.tencent.com/position.php?keywords=&lid=0&start=0#a")
+	c.OnHTML("#next", func(h *colly.HTMLElement) {
+		t := donain + h.Attr("href")
+		log.Printf(t)
+		c.Visit(t)
+	})
+
+	c.Visit(start_url)
 
 	log.Printf("Scraping finished, check file %q for results\n", fName)
 }
