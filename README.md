@@ -3,8 +3,15 @@
 
 ## Go 爬取网上感兴趣的数据
 1. 爬取腾讯招聘官网数据
+```
+go run main.go
+```
 
 ![hr](./img/hr-crawl.png "hr")
 
 2. 爬取深圳房源信息
 [深圳房源概况](./sz-house/sz-house-summary.csv "深圳房源")
+
+```
+ go run summary.go
+
