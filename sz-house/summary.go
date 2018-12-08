@@ -37,8 +37,12 @@ func main() {
 	writer.Write([]string{"company", "property", "location", "area", "id"})
 
 	// Instantiate default collector
-	c := colly.NewCollector()
+	c := colly.NewCollector(
+		colly.MaxDepth(15),
+		colly.Async(true),
+	)
 
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 15})
 	c.OnHTML("#caTable tbody tr", func(e *colly.HTMLElement) {
 		itemClass := e.Attr("class")
 		evenClass := "tab_body bd0"
@@ -56,14 +60,15 @@ func main() {
 	})
 
 	c.OnHTML(".xbaiPage_next", func(h *colly.HTMLElement) {
-		t := donain + h.Attr("href")
-		log.Printf(t)
-		c.Visit(t)
+		next := donain + h.Attr("href")
+		log.Printf(next)
+		c.Visit(next)
 	})
 
 	c.Visit(start_url)
 
 	log.Printf("Scraping finished, check file %q for results\n", fName)
+	c.Wait()
 }
 
 // 楼盘划分继续分页爬
@@ -87,8 +92,12 @@ func property_crawler(p *colly.HTMLElement) {
 	writer.Write([]string{"房号", "建筑面积", "建筑面积单价", "套内面积", "套内面积单价", "总售价", "销售状态", "备注"})
 
 	// Instantiate default collector
-	c := colly.NewCollector()
+	c := colly.NewCollector(
+		colly.MaxDepth(15),
+		colly.Async(true),
+	)
 
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 15})
 	c.OnHTML("#caTable tbody tr", func(e *colly.HTMLElement) {
 		itemClass := e.Attr("class")
 		evenClass := "tab_body"
@@ -115,6 +124,7 @@ func property_crawler(p *colly.HTMLElement) {
 
 	property_start := property_url + p.ChildAttr("td:nth-child(5) a", "val")
 	c.Visit(property_start)
+	c.Wait()
 
 	log.Printf("Scraping finished, check file %q for results\n", fName)
 }
