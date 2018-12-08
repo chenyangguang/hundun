@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/csv"
+	//"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/gocolly/colly"
 	"strings"
@@ -13,12 +15,16 @@ var (
 	donain       = "https://app02.szmqs.gov.cn"
 	start_url    = donain + "/0501W/Default.aspx?page=1"
 	property_url = donain + "/0501W/Iframe/LicItemIframe.aspx?licId="
+	property_dir = "./property"
 )
 
 func main() {
-	//fName := "sz-house-summary.csv"
-	fName := "sz-house-summary-tmp.csv"
-	file, err := os.Create(fName)
+	if _, err := os.Stat(property_dir); os.IsNotExist(err) {
+		os.Mkdir(property_dir, 0777)
+	}
+	fName := "sz-house-summary.csv"
+	f := filepath.Join(property_dir, fName)
+	file, err := os.Create(f)
 	if err != nil {
 		log.Fatalf("Cannot create file %q: %s\n", fName, err)
 		return
@@ -63,9 +69,11 @@ func main() {
 // 楼盘划分继续分页爬
 func property_crawler(p *colly.HTMLElement) {
 	name := p.ChildText("td:nth-child(2)")
-	log.Print(name)
 
-	fName := name + ".csv"
+	if name == "" {
+		return
+	}
+	fName := filepath.Join(property_dir, name+".csv")
 	file, err := os.Create(fName)
 	if err != nil {
 		log.Fatalf("Cannot create file %q: %s\n", fName, err)
